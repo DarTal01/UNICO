@@ -1,0 +1,77 @@
+#UNICO CONTROLLER INPUT FILE
+1                   ! dEcho             		- print Echo file
+
+#GEOMETRY DATA:
+2					! Architecture_Selector 	- 1:Hawt  2:Vawt					[-]
+2					! dBlades_Number			- Number of Blades,					[-]				
+76.000              ! dRotorRadius     		    - Blade length (R), 				[m]
+303					! dBlades_Height			- Height of the Blades (VAWT only) 	[m]
+0					! RotIn						- Rotor Inertia					    [kg m^2]
+1.225               ! dRhoAir           		- Air density, 										[kg m^-3]
+
+#WIND TURBINE SPECS:
+9.100               ! dRtWSpd           		- Wind speed at rated power, 		[m/s]
+19759341.0          ! dRtTq             		- Rated torque, 					[Nm]
+9360000.0           ! dRtPwr            		- Wind turbine rated power 			[W]
+0.480               ! dCpMax            		- Max Cp target, 					[-]
+4.0                 ! dTSRopt           		- Target Tip-Speed-Ratio 			[-]
+
+#GENERATOR SPECS:
+0.4737              ! dRtGenSpeed       		- Rated generator speed 			[rad/s]
+1.000               ! dGenEff           		- Generator efficiency, 			[%]
+0.000               ! dMinTq            		- Minimum generator, 				[Nm]
+54505000          	! dMaxTq            		- Maximum generator torque, 		[Nm]
+12394437.0          ! dMaxRat           		- Maximum torque rate, 				[Nm/s]
+0.100               ! dMinOMSpd         		- Minimum rotational speed 			[rad/s]
+
+#CONTROL MODE:
+0                   ! dRgn2Mode         		- Region 2 control mode {0: optimum tsr tracking}
+0                   ! dKSwitch          		- Switch for user imposed K
+127.72359           ! dRgn2K            		- (Not used in mode 0)
+0.45                ! dOMSpdSwitch      		- (Not used in mode 0)
+0.20                ! dMinOMSpdSwitch   		- (Not used in mode 0)
+1                   ! dRgn3Mode         		- Region 3 control mode
+-0.02               ! dMRgn3Lin         		- Angular Coefficient
+12                  ! dVLin             		- Wind speed start linear reduction
+
+#DATA FILTERS and STATUS FLAGS:
+1                   ! dWindSpeedFSw     		- Filter Switch (0: Off; Else:On)
+4                   ! dWindSpeedFLPF    		- Filter frequency
+1                   ! dGenSpeedFSw      		- Filter Switch (0: A On; 1: B On; Else:Off)
+4                   ! dGenSpeedFLPF     		- Filter frequency
+1                   ! dRefSpeedFSw      		- Filter Switch (0: A On; 1: B On; Else:Off)
+4                   ! RefSpeedFLPF      		- Filter frequency
+0                   ! dFPitch           		- Fixed pitch angle
+0.05				! dZeros_Damping 			- Dimensionless damping ratio of the zeros			[-]
+0.4					! dPoles_Damping			- Dimensionless damping ratio of the poles			[-]
+1					! dAWSwitch					- Anti windup Switch (0:Off; else: On) 				
+0					! dIntTermSwitch			- Integral Term Saturation Switch (0:Off; else:On) 	
+
+#GAIN SCHEDULING:
+-618761084          ! dKpAr             		- Proportional gain
+-21598836           ! dKiAr             		- Integral gain
+-618761084          ! dKpBr             		- Proportional gain
+-21598836           ! dKiBr             		- Integral gain
+0					! dKpBrMode				    - KpBr Switch (0: Array Mode; 1: Float Mode )
+0					! dKiBrMode					- KiBr Switch (0: Array Mode; 1: Float Mode )
+1				    ! dKpArMode				    - KpAr Switch (0: Array Mode; 1: Float Mode )
+1					! dKiArMode					- KiAr Switch (0: Array Mode; 1: Float Mode )
+1.0  2.0  3.0  4.0  5.0     ! dKpBrLUT        - [5 values]
+1.0  2.0  3.0  4.0  5.0     ! dKiBrLUT        - [5 values]
+1.0  2.0  3.0  4.0  5.0     ! dKpArLUT        - [5 values]
+1.0  2.0  3.0  4.0  5.0     ! dKiArLUT        - [5 values]
+1.0  3.0  5.0  7.0  9.0     ! dWindSpeed_KpBrLUT_BP - [5 values]
+1.0  3.0  5.0  7.0  9.0     ! dWindSpeed_KiBrLUT_BP - [5 values]
+12.0  15.0 18.0  21.0  24.0     ! dWindSpeed_KpArLUT_BP - [5 values]
+12.0  15.0 18.0  21.0  24.0     ! dWindSpeed_KiArLUT_BP - [5 values]
+unused                       ! Path to file
+
+
+#IMPORTANT NOTES!  
+# DO NOT ADD, REMOVE OR CHANGE THE ORDER OF THE INPUTS. DO NOT ADD LINES IN THE FILE OR REMOVE THE HEADERS
+# DO NOT RENAME THIS INPUT FILE. 
+# THIS FILE MUST BE PLACED IN THE OPENFAST PATH
+
+CONTROLLER_IN
+SWAP DATA
+26 "Abs Wind Vel. at Hub [m/s]"		
