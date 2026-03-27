@@ -1,77 +1,139 @@
 #UNICO CONTROLLER INPUT FILE
-1                   ! dEcho             		- print Echo file
+1                   ! dEcho                     - print Echo file	[-]
 
 #GEOMETRY DATA:
-2					! Architecture_Selector 	- 1:Hawt  2:Vawt					[-]
-2					! dBlades_Number			- Number of Blades,					[-]				
-76.000              ! dRotorRadius     		    - Blade length (R), 				[m]
-303					! dBlades_Height			- Height of the Blades (VAWT only) 	[m]
-0					! RotIn						- Rotor Inertia					    [kg m^2]
-1.225               ! dRhoAir           		- Air density, 										[kg m^-3]
+2                   ! Architecture_Selector     - 1:Hawt  2:Vawt                					[-]
+1					! Darrieus_Selector			- 1: H-type 2: 				(Eggbeater-Type VAWT)	[-]
+500					! Rotor_Area				- Rotor Area 				(Eggbeater-Type VAWT)	[m^2]
+2                   ! dBlades_Number            - Number of Blades             						[-]
+76.000              ! dRotorRadius              - Rotor Radius		             					[m]
+303                 ! dBlades_Height            - Blades Height 			(H-Type VAWT)   		[m]
+1367762293          ! dRotInertia               - Rotor Inertia                 					[kg m^2]
+1.225               ! dRhoAir                   - Air density                  						[kg m^-3]
 
 #WIND TURBINE SPECS:
-9.100               ! dRtWSpd           		- Wind speed at rated power, 		[m/s]
-19759341.0          ! dRtTq             		- Rated torque, 					[Nm]
-9360000.0           ! dRtPwr            		- Wind turbine rated power 			[W]
-0.480               ! dCpMax            		- Max Cp target, 					[-]
-4.0                 ! dTSRopt           		- Target Tip-Speed-Ratio 			[-]
-
+9.100               ! dRtWSpd                   - Wind speed at rated power    	[m/s]
+19759341.0          ! dRtTq                     - Rated torque					[Nm]
+9360000.0           ! dRtPwr                    - Wind turbine rated power    	[W]
+0.480               ! dCpMax                    - Max Cp target					[-]
+4.0                 ! dTSRopt                   - Target Tip-Speed-Ratio		[-]
+ 
 #GENERATOR SPECS:
-0.4737              ! dRtGenSpeed       		- Rated generator speed 			[rad/s]
-1.000               ! dGenEff           		- Generator efficiency, 			[%]
-0.000               ! dMinTq            		- Minimum generator, 				[Nm]
-54505000          	! dMaxTq            		- Maximum generator torque, 		[Nm]
-12394437.0          ! dMaxRat           		- Maximum torque rate, 				[Nm/s]
-0.100               ! dMinOMSpd         		- Minimum rotational speed 			[rad/s]
+0.4737              ! dRtGenSpeed               - Rated generator speed         		[rad/s]
+1.000               ! dGenEff                   - Generator efficiency         			[-]
+-10000000000        ! dMinTq          			- Minimum generator torque     			[Nm]
+10000000000         ! dMaxTq                    - Maximum generator torque     			[Nm]
+10000000000         ! dMaxRat                 	- Maximum torque rate          			[Nm/s]
+0.100               ! dMinOMSpd                 - Minimum rotational speed     			[rad/s]
+1					! GearBox_Ratio				- GenSpeed/RotSpeed, 1: Direct Drive	[-]
 
 #CONTROL MODE:
-0                   ! dRgn2Mode         		- Region 2 control mode {0: optimum tsr tracking}
-0                   ! dKSwitch          		- Switch for user imposed K
-127.72359           ! dRgn2K            		- (Not used in mode 0)
-0.45                ! dOMSpdSwitch      		- (Not used in mode 0)
-0.20                ! dMinOMSpdSwitch   		- (Not used in mode 0)
-1                   ! dRgn3Mode         		- Region 3 control mode
--0.02               ! dMRgn3Lin         		- Angular Coefficient
-12                  ! dVLin             		- Wind speed start linear reduction
+0                   ! dRgn2Mode                 - Region 2 control mode 				(0: TSR tracking; 1: K-ω² law)     		 		   [-]
+0                   ! dKSwitch                  - Switch for user imposed K 			(0: auto-calculate; 1: use dRgn2K)    	 		   [-]
+127.72359           ! dRgn2K                    - Region 2 K coefficient 				(used only if dKSwitch=1)        				   [Nm/(rad/s)^2]
+0.45                ! dOMSpdSwitch              - Switching speed Region 2 to 2.5 		(used only if dRgn2Mode=1)               		   [rad/s]
+0.20                ! dMinOMSpdSwitch           - Switching speed Region 1.5 to 2 		(used only if dRgn2Mode=1)               		   [rad/s]
+0                   ! dRgn3Mode                 - Region 3 control mode 				(0: rated power tracking; 1: linear reduction)     [-]
+-0.02               ! dMRgn3Lin                 - Angular coefficient 					(used only if dRgn3Mode=1)                         [(rad/s)/(m/s)]
+25                  ! dVLin                     - Wind speed to start linear reduction 	(used only if dRgn3Mode=1)          			   [m/s]
 
 #DATA FILTERS and STATUS FLAGS:
-1                   ! dWindSpeedFSw     		- Filter Switch (0: Off; Else:On)
-4                   ! dWindSpeedFLPF    		- Filter frequency
-1                   ! dGenSpeedFSw      		- Filter Switch (0: A On; 1: B On; Else:Off)
-4                   ! dGenSpeedFLPF     		- Filter frequency
-1                   ! dRefSpeedFSw      		- Filter Switch (0: A On; 1: B On; Else:Off)
-4                   ! RefSpeedFLPF      		- Filter frequency
-0                   ! dFPitch           		- Fixed pitch angle
-0.05				! dZeros_Damping 			- Dimensionless damping ratio of the zeros			[-]
-0.4					! dPoles_Damping			- Dimensionless damping ratio of the poles			[-]
-1					! dAWSwitch					- Anti windup Switch (0:Off; else: On) 				
-0					! dIntTermSwitch			- Integral Term Saturation Switch (0:Off; else:On) 	
+0                   ! dWindSpeedFSw             - Windspeed Filter Switch 				(0: Off; Else:On)							[-]
+1                   ! dWindSpeedFLPF            - Windspeed Filter frequency 														[Hz]
+0                   ! dGenSpeedFSw              - Generator Speed Filter Switch 		(0: Off; Else:On)							[-]
+1                   ! dGenSpeedFLPF             - Generator Speed Filter frequency 													[Hz]
+0                   ! dRefSpeedFSw              - Ref Generator Speed Filter Switch 	(0: Off; Else:On)							[-]
+1                   ! RefSpeedFLPF              - Ref Generator Speed Filter frequency 												[Hz]
+0                   ! dFPitch                   - Fixed pitch angle (-100: max Cp envelope; else: extract Cp/TSR at this pitch)		[rad]
+0					! Pitch_LPF_Sw				- Pitch Filter Switch 					(0: Off; Else:On)							[-]
+1					! Pitch_F_LPF				- Pitch Filter frequency 															[Hz]
+1					! Torque_LPF_Sw				- Generator Torque Filter Switch 		(0: Off; Else:On)							[-]
+1					! Torque_F_LPF				- Torque Filter frequency 															[Hz]
+1					! Power_LPF_Sw				- Power Filter Switch 					(0: Off; Else:On)							[-]
+1					! Power_F_LPF				- Power Filter frequency 															[Hz]
+0					! LPF_StartingTime			- LowPass Filters Activation Time 													[s]
+0.01                ! dZeros_Damping            - Notch Filter Zeros Damping 														[-]
+0.3                 ! dPoles_Damping            - Notch Filter Poles Damping 														[-]
+1                   ! dAWSwitch                 - Anti windup Switch 					(0: Off; else:On)							[-]
+0                   ! dIntTermSwitch            - Integral Term Saturation Switch 		(0: Off; else:On)							[-]
 
-#GAIN SCHEDULING:
--618761084          ! dKpAr             		- Proportional gain
--21598836           ! dKiAr             		- Integral gain
--618761084          ! dKpBr             		- Proportional gain
--21598836           ! dKiBr             		- Integral gain
-0					! dKpBrMode				    - KpBr Switch (0: Array Mode; 1: Float Mode )
-0					! dKiBrMode					- KiBr Switch (0: Array Mode; 1: Float Mode )
-1				    ! dKpArMode				    - KpAr Switch (0: Array Mode; 1: Float Mode )
-1					! dKiArMode					- KiAr Switch (0: Array Mode; 1: Float Mode )
-1.0  2.0  3.0  4.0  5.0     ! dKpBrLUT        - [5 values]
-1.0  2.0  3.0  4.0  5.0     ! dKiBrLUT        - [5 values]
-1.0  2.0  3.0  4.0  5.0     ! dKpArLUT        - [5 values]
-1.0  2.0  3.0  4.0  5.0     ! dKiArLUT        - [5 values]
-1.0  3.0  5.0  7.0  9.0     ! dWindSpeed_KpBrLUT_BP - [5 values]
-1.0  3.0  5.0  7.0  9.0     ! dWindSpeed_KiBrLUT_BP - [5 values]
-12.0  15.0 18.0  21.0  24.0     ! dWindSpeed_KpArLUT_BP - [5 values]
-12.0  15.0 18.0  21.0  24.0     ! dWindSpeed_KiArLUT_BP - [5 values]
-unused                       ! Path to file
+#SET POINT SMOOTHER FILTERS and STATUS FLAGS:
+0					! SPS_Mode					- Set Point Smoother Mode 					(0: Off; Else: On)	[-]
+1					! SPS_Kvs					- Set Point Smoother Pitch Gain 								[-]
+1					! SPS_Kpc					- Set Point Smoother Power Gain 								[1/W]
+0.524				! SPS_Abbas_Factor			- Normalization Factor from Abbas 			(0.524 [rad])		[rad]	
+1					! PS_F_LPF					- Minimum Pitch Selector Filter frequency 						[Hz]
+0					! PS_LPF_Sw					- Minimum Pitch Selector Filter Switch 		(0: Off; Else: On)	[-]
+1					! SPS_LPF_Sw				- Set Point Smoother Output Filter Switch 	(0: Off; Else:On)	[-]
+1					! SPS_F_LPF					- Set Point Smoother Output Filter frequency 					[Hz]
 
+#PITCH CONTROL INPUTS:
+0.09				! Pitch_Rate				- Maximum Pitch Rate 											[Rad/s]
+1.570				! Max_Pitch					- Maximum Pitch Angle 											[Rad]
 
-#IMPORTANT NOTES!  
+#WINDSPEED ESTIMATOR INPUTS:
+0					! WSE_Mode					- Wind Speed Estimator Mode  (0: Raw Windspeed; 1: TBE; 2: EKF)	[-]
+0.0067				! Process_Noise_Q			- Process Noise Covariance 										[-]
+0.02				! Measurement_Noise_R   	- Mesaurement Noise Covariance 									[-]
+1					! TBE_F_LPF					- Torque Balance Estimator Filter frequency 					[Hz]
+1					! EKF_F_LPF					- Extended Kalman Filter frequency 								[Hz]
+0.02				! Rm						- Mesaurement Noise Covariance									[-]
+0.18				! Ti						- Turbulence Intensity for Process Noise 						[-]
+	
+#TORQUE CONTROLLER GAINS (GS on generator speed):
+3                                          	! nKpBr - Number of points [-]
+0.16  -618761084                            ! GS [rad/s]  KpBr [Nms/rad]
+0.26  -618761084                            ! GS [rad/s]  KpBr [Nms/rad]
+0.26  -618761084                            ! GS [rad/s]  KpBr [Nms/rad]
+2                                          	! nKiBr - Number of points [-]
+0.16  -0                            	   	! GS [rad/s]  KiBr [Nm/rad]
+0.26  -0                           	   		! GS [rad/s]  KiBr [Nm/rad]
+2                                          	! nKpAr - Number of points [-]
+0.26  -8000000000	                        ! GS [rad/s]  KpAr [Nms/rad]
+0.25  -8000000000                           ! GS [rad/s]  KpAr [Nms/rad]
+2                                     	    ! nKiAr - Number of points [-]
+0.26  -0                          		    ! GS [rad/s]  KiAr [Nm/rad]
+0.25  -0                          		    ! GS [rad/s]  KiAr [Nm/rad]
+#PITCH PI GAINS (GS on pitch angle):
+30                                      	! PC_GS_n - Number of gain scheduling breakpoints [-]
+0.0 0.154248 0.174088 0.191834 0.208118 0.223336 0.237729 0.251455 0.264636 0.277194 0.289150 0.300849 0.312186 0.323056 0.333829 0.344197 0.354388 0.364415 0.374109 0.383793 0.393053 0.402339 0.411264 0.420182 0.428783 0.437383 0.445746 0.454164 0.462360 0.470617    									! PC_GS_angles 	[rad]
+-0.103956 -0.086599 -0.072157 -0.059953 -0.049502 -0.040454 -0.032543 -0.025567 -0.019371 -0.013829 -0.008845 -0.004337 -0.000240 0.003499 0.006925 0.010076 0.012984 0.015676 0.018174 0.020500 0.022671 0.024701 0.026604 0.028391 0.030073 0.031658 0.033155 0.034571 0.035913 0.037185  				    ! PC_GS_Kp 		[s]
+-0.050813 -0.046156 -0.042281 -0.039006 -0.036202 -0.033774 -0.031652 -0.029780 -0.028117 -0.026631 -0.025293 -0.024084 -0.022984 -0.021981 -0.021062 -0.020216 -0.019436 -0.018714 -0.018044 -0.017419 -0.016837 -0.016292 -0.015782 -0.015302 -0.014851 -0.014426 -0.014024 -0.013644 -0.013284 -0.012943     ! PC_GS_Ki 		[-]
+#PEAK SHAVING:
+60                                          ! PS_n - Number of breakpoints [-]
+2.000 2.345 2.690 3.034 3.379 3.724 4.069 4.414 4.759 5.103 5.448 5.793 6.138 6.483 6.828 7.172 7.517 7.862 8.207 8.552 8.897 9.241 9.586 9.931 10.276 10.621 10.966 11.310 11.655 12.000 12.267 12.533 12.800 13.067 13.333 13.600 13.867 14.133 14.400 14.667 14.933 15.200 15.467 15.733 16.000 16.267 16.533 16.800 17.067 17.333 17.600 17.867 18.133 18.400 18.667 18.933 19.200 19.467 19.733 20.000    ! PS_WindSpeeds [m/s]
+0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.013 0.030 0.047 0.062 0.077 0.091 0.105 0.119 0.132 0.145 0.155 0.164 0.174 0.183 0.193 0.202 0.211 0.220 0.229 0.238 0.247 0.255 0.264 0.272 0.281 0.289 0.297 0.305 0.314 0.322 0.330 0.338 0.345 0.353 0.361 0.369 0.376 0.384 0.391 0.398  ! PS_BldPitchMin [rad]
+#EKF SYSTEM POLES:
+60                                          ! WE_FOPoles_n - Number of breakpoints [-]
+2.0000 2.3448 2.6897 3.0345 3.3793 3.7241 4.0690 4.4138 4.7586 5.1034 5.4483 5.7931 6.1379 6.4828 6.8276 7.1724 7.5172 7.8621 8.2069 8.5517 8.8966 9.2414 9.5862 9.9310 10.2759 10.6207 10.9655 11.3103 11.6552 12.0000 12.2667 12.5333 12.8000 13.0667 13.3333 13.6000 13.8667 14.1333 14.4000 14.6667 14.9333 15.2000 15.4667 15.7333 16.0000 16.2667 16.5333 16.8000 17.0667 17.3333 17.6000 17.8667 18.1333 18.4000 18.6667 18.9333 19.2000 19.4667 19.7333 20.0000    ! WE_FOPoles_v [m/s]
+-0.04473247 -0.05244497 -0.06015746 -0.06786996 -0.07558245 -0.08329495 -0.09100744 -0.09871994 -0.10643243 -0.11414493 -0.12185742 -0.12956992 -0.13728241 -0.14499491 -0.15270740 -0.16041990 -0.16813239 -0.17046246 -0.16535090 -0.16131667 -0.13391534 -0.10251232 -0.07524872 -0.03085040 0.01871651 0.03203468 0.08842303 0.09602714 0.15464543 -0.04711137 -0.12406106 -0.19135870 -0.25517144 -0.31773596 -0.37761204 -0.43053718 -0.48386945 -0.53844283 -0.59482336 -0.65217223 -0.70996711 -0.77067606 -0.83329344 -0.88428618 -0.93728989 -0.98923206 -1.04256869 -1.09793138 -1.15275738 -1.21200189 -1.26892953 -1.33118241 -1.39166433 -1.45748626 -1.53198101 -1.62664547 -1.71909685 -1.81799033 -1.91228032 -2.01376037    ! WE_FOPoles [1/s]
+#CP PERFORMANCE TABLE (for TBE/EKF, also used to derive Cp/TSR 1D curve):
+3  17                                     	! Cp_nPitch  Cp_nTSR - Matrix dimensions [-] [-]
+-1.0 0.0 1.0							  												! Cp_v_pitch [deg]
+0.0 0.25 0.5 0.75 1.0 1.25 1.50 1.75 2.0 2.25 2.50 2.75 3.0 3.25 3.50 3.75 4.0 			! Cp_v_TSR   [-]
+0.0 0.0 0.0 
+0.002 0.004 0.003
+0.011 0.012 0.010
+0.023 0.026 0.021
+0.045 0.049 0.043
+0.086 0.084 0.082
+0.135 0.131 0.127
+0.183 0.188 0.183
+0.253 0.256 0.251
+0.315 0.318 0.310
+0.366 0.366 0.362
+0.407 0.401 0.397
+0.423 0.423 0.422
+0.433 0.439 0.439
+0.444 0.449 0.442
+0.456 0.454 0.451
+0.459 0.455 0.453 
+
+#IMPORTANT NOTES!
 # DO NOT ADD, REMOVE OR CHANGE THE ORDER OF THE INPUTS. DO NOT ADD LINES IN THE FILE OR REMOVE THE HEADERS
-# DO NOT RENAME THIS INPUT FILE. 
+# DO NOT RENAME THIS INPUT FILE.
 # THIS FILE MUST BE PLACED IN THE OPENFAST PATH
 
 CONTROLLER_IN
 SWAP DATA
-26 "Abs Wind Vel. at Hub [m/s]"		
+26 "Abs Wind Vel. at Hub [m/s]"	
